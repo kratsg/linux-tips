@@ -21,7 +21,7 @@ jobs:
           ls -lh ./atlas-tips.dat
 
       - name: Test
-        run: fortune ./atlas-tips
+        run: fortune $PWD/atlas-tips
 
       - name: Test random tips uniqueness
         run: |
@@ -31,7 +31,7 @@ jobs:
 
           echo "Sampling $SAMPLE_SIZE random tips from $TOTAL_TIPS available tips..."
           tips=$(for i in $(seq 1 $SAMPLE_SIZE); do
-            fortune ./atlas-tips | head -n 1
+            fortune $PWD/atlas-tips | head -n 1
           done)
 
           echo "$tips" | sort | uniq -c | sort -nr
