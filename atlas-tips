@@ -1,7 +1,6 @@
 View file contents with different tools for different needs.
 
-   cat data.root           # Print entire file
-   less data.root          # Browse file (q to quit, / to search, g/G for top/bottom)
+   less output.log         # Browse file (q to quit, / to search, g/G for top/bottom)
    head -n 20 output.log   # View first 20 lines
    tail -f job.log         # Follow log file as it grows
 %
@@ -447,18 +446,6 @@ Clear terminal screen when it gets cluttered.
 
    clear                                    # Clear screen (Ctrl+L also works)
 %
-View recent login history.
-
-   last                                     # Show recent logins
-   last -n 10                               # Show last 10 logins
-   lastlog                                  # Last login for all users
-%
-Check current users logged into system.
-
-   who                                      # Show logged in users
-   w                                        # Show users and what they're doing
-   users                                    # Simple list of users
-%
 Check system uptime and load average.
 
    uptime                                   # Show uptime and load
@@ -526,11 +513,6 @@ Print system resource limits.
    ulimit -a                                # Show all limits
    ulimit -n                                # Show max open files
    ulimit -n 4096                           # Set max open files (current shell)
-%
-Safely remove files by overwriting (if security needed).
-
-   shred -u sensitive_data.txt              # Overwrite and delete
-   shred -n 10 file.txt                     # Overwrite 10 times
 %
 Join lines of two files on a common field.
 
@@ -627,11 +609,6 @@ Display SELinux or AppArmor status (if present).
    getenforce                               # SELinux status
    sestatus                                 # Detailed SELinux status
    aa-status                                # AppArmor status
-%
-Benchmark and stress test your system (if installed).
-
-   stress --cpu 4 --timeout 60s             # CPU stress test
-   sysbench cpu run                         # CPU benchmark
 %
 Use rsync for efficient directory syncing and backups.
 
@@ -939,10 +916,79 @@ Validate analysis environment before running.
 
    command -v root && command -v python3 && echo "Environment OK"
 %
-Set up environment for ATLAS analysis (example).
+Set up ATLAS environment with setupATLAS.
 
    export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
    source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+   setupATLAS                               # Initialize ATLAS environment
+%
+Use lsetup to configure specific ATLAS tools and releases.
+
+   lsetup "root 6.28.04-x86_64-centos7-gcc11-opt"  # Set up specific ROOT version
+   lsetup "views LCG_102 x86_64-centos7-gcc11-opt" # Set up LCG release
+   lsetup rucio                             # Set up Rucio client
+   lsetup panda                             # Set up PanDA client
+   lsetup emi                               # Set up grid tools
+%
+Initialize VOMS proxy for grid authentication.
+
+   voms-proxy-init -voms atlas             # Create 12-hour proxy
+   voms-proxy-init -voms atlas -valid 96:00  # Create 4-day proxy
+   voms-proxy-info                          # Check proxy status
+   voms-proxy-destroy                       # Remove proxy
+%
+Use rucio to search for and download ATLAS datasets.
+
+   rucio list-dids "data18*:AOD*"           # Search for datasets
+   rucio list-files user.username:dataset   # List files in dataset
+   rucio get user.username:dataset          # Download entire dataset
+   rucio download --ndownloader 4 scope:dataset  # Parallel download
+%
+Advanced rucio commands for dataset management.
+
+   rucio list-file-replicas scope:dataset   # Show where files are located
+   rucio add-dataset scope:dataset          # Create new dataset
+   rucio attach scope:dataset scope:file    # Add file to dataset
+   rucio list-dataset-replicas scope:dataset  # Show dataset locations
+%
+Access files on grid storage using xrootd.
+
+   xrdcp root://server//path/file.root .    # Copy file from xrootd server
+   xrdcp -f file.root root://server//path/  # Upload file to xrootd
+   xrdcp --parallel 4 root://server//file . # Parallel transfer
+%
+Browse and manage files on xrootd servers.
+
+   xrdfs root://server ls /path             # List directory
+   xrdfs root://server stat /path/file.root # Get file info
+   xrdfs root://server rm /path/file.root   # Delete file
+   xrdfs root://server mkdir /path/newdir   # Create directory
+%
+Access CERN EOS storage from lxplus.
+
+   eos ls /eos/atlas/user/                  # List directory
+   eos cp file.root /eos/atlas/user/u/username/  # Copy to EOS
+   eos rm /eos/atlas/user/u/username/file.root   # Remove file
+   eos find /eos/atlas/user/u/username/ --name "*.root"  # Find files
+%
+Submit grid jobs with pathena for Athena analysis.
+
+   pathena --inDS input.dataset --outDS user.username.output MyJobOptions.py
+   pathena --nFilesPerJob=5 --inDS=input.dataset MyJobOptions.py
+   pathena --extFile=mylib.so --inDS=input.dataset script.py
+%
+Submit generic grid jobs with prun.
+
+   prun --exec "myScript.sh %IN" --inDS=input.dataset --outDS=user.username.output
+   prun --nFilesPerJob=10 --outputs output.root --inDS=dataset --exec "./analysis %IN"
+%
+Check grid job status with pbook.
+
+   pbook                                    # Start PanDA book interface
+   pbook -c "show()"                        # Show recent jobs
+   pbook -c "show(123456)"                  # Show specific job details
+   pbook -c "kill(123456)"                  # Kill a job
+   pbook -c "retry(123456)"                 # Retry failed job
 %
 Check ROOT installation and version.
 
@@ -1137,12 +1183,6 @@ Find duplicate files based on content.
 
    fdupes -r directory/                     # If fdupes installed
    find . -type f -exec md5sum {} + | sort | uniq -w32 -d  # Using find+md5sum
-%
-Securely delete file contents before removal.
-
-   shred -vfz -n 5 sensitive.txt            # Overwrite 5 times
-   dd if=/dev/urandom of=sensitive.txt bs=1M  # Alternative
-   rm sensitive.txt
 %
 Show what commands are actually aliased.
 
@@ -1344,12 +1384,6 @@ Lock file to prevent concurrent execution.
      flock -n 200 || exit 1
      # Critical section here
    ) 200>/var/lock/mylockfile
-%
-Generate random passwords or tokens.
-
-   openssl rand -base64 32                  # Random base64 string
-   openssl rand -hex 16                     # Random hex string
-   tr -dc 'A-Za-z0-9!@#$%^&*' < /dev/urandom | head -c 20  # Random password
 %
 Convert epoch time to human readable.
 
@@ -1555,12 +1589,6 @@ Open files with their default application from command line.
    xdg-open file.pdf                        # Open with default PDF viewer
    xdg-open https://example.com             # Open URL in default browser
    xdg-open .                               # Open current directory in file manager
-%
-Encrypt and decrypt files securely with GPG.
-
-   gpg --symmetric sensitive_data.txt       # Encrypt (creates .gpg file)
-   gpg --decrypt sensitive_data.txt.gpg     # Decrypt file
-   rm sensitive_data.txt                    # Remove unencrypted file
 %
 Set up SSH keys for passwordless authentication.
 
@@ -2014,11 +2042,6 @@ Use SVN for version control (legacy ATLAS code repositories).
    svn status                               # Check status
    svn commit -m "message"                  # Commit changes
    svn diff                                 # Show changes
-%
-Automate interactive programs like SSH login with expect.
-
-   expect -c 'spawn ssh user@lxplus.cern.ch; expect "password:"; send "pass\r"; interact'
-   # Better: use SSH keys instead of expect for passwords
 %
 Resolve three-way merge conflicts in analysis code.
 
