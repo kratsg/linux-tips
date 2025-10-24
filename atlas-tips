@@ -1833,6 +1833,203 @@ Remember: man pages and --help are your friends for detailed information!
    command --help                           # Quick usage summary
    info command                             # GNU info documentation (if available)
 %
+Compile C++ analysis code with g++ for performance-critical tasks.
+
+   g++ -o analysis analysis.cpp             # Basic compilation
+   g++ -O2 -o fast_analysis analysis.cpp    # With optimization
+   g++ -g -o debug_analysis analysis.cpp    # With debug symbols
+   g++ -std=c++17 -o analysis analysis.cpp  # Specify C++ standard
+%
+Common g++ optimization and warning flags for better code.
+
+   g++ -O3 -march=native analysis.cpp       # Maximum optimization for your CPU
+   g++ -Wall -Wextra analysis.cpp           # Enable most warnings
+   g++ -c module.cpp                        # Compile without linking
+%
+Link against ROOT and other libraries when building analysis tools.
+
+   g++ analysis.cpp `root-config --cflags --libs` -o analysis
+   g++ -I/path/to/include -L/path/to/lib -lmylib analysis.cpp
+%
+Build C analysis code with gcc compiler.
+
+   gcc -o process process.c                 # Basic compilation
+   gcc -O2 -Wall -o process process.c       # With optimization and warnings
+   gcc -g -o debug_process process.c        # Compile with debug info
+%
+Automate builds with make to recompile only what changed.
+
+   make                                     # Build using Makefile
+   make clean                               # Remove built files
+   make -j4                                 # Parallel build with 4 jobs
+   make VERBOSE=1                           # Show full compile commands
+%
+Use cmake for complex C++ projects with many dependencies.
+
+   cmake -B build -S .                      # Configure build in build/ directory
+   cmake --build build                      # Build the project
+   cmake --build build -j4                  # Parallel build
+   cmake -B build -DCMAKE_BUILD_TYPE=Release  # Release build with optimization
+%
+Debug segmentation faults and crashes with gdb.
+
+   gdb ./analysis                           # Start debugger
+   gdb ./analysis core                      # Debug with core dump
+   gdb --args ./analysis input.root         # Debug with arguments
+%
+Essential gdb commands for debugging analysis code.
+
+   (gdb) run                                # Start program
+   (gdb) break main                         # Set breakpoint at main
+   (gdb) break analysis.cpp:42              # Set breakpoint at line
+   (gdb) print variable                     # Print variable value
+   (gdb) backtrace                          # Show call stack
+   (gdb) continue                           # Continue execution
+%
+Debug running processes that appear to hang or crash.
+
+   gdb -p $(pgrep analysis)                 # Attach to running process
+   # In gdb: bt, info threads, thread apply all bt
+%
+Track changes to analysis code with git version control.
+
+   git init                                 # Initialize repository
+   git clone https://gitlab.cern.ch/user/analysis.git  # Clone repository
+   git status                               # Check status
+   git log --oneline                        # View commit history
+%
+Make commits to save your analysis progress.
+
+   git add analysis.py cuts.py              # Stage specific files
+   git add *.py                             # Stage all Python files
+   git commit -m "Add new selection cuts"   # Commit with message
+   git diff                                 # See uncommitted changes
+%
+Work with git branches for trying new analysis strategies.
+
+   git branch                               # List branches
+   git branch new-analysis                  # Create new branch
+   git checkout new-analysis                # Switch to branch
+   git checkout -b feature-test             # Create and switch in one command
+   git merge feature-test                   # Merge branch into current
+%
+Synchronize your analysis code with remote repositories.
+
+   git pull                                 # Fetch and merge from remote
+   git push                                 # Push commits to remote
+   git push origin main                     # Push to specific branch
+   git fetch                                # Download without merging
+%
+Share code with collaborators using git remotes.
+
+   git remote -v                            # Show remote repositories
+   git remote add origin https://gitlab.cern.ch/user/repo.git
+   git push -u origin main                  # Set upstream and push
+%
+View what changed in recent git commits.
+
+   git log -p                               # Show diffs in log
+   git log --graph --oneline --all          # Visual branch history
+   git show commit_hash                     # Show specific commit
+   git diff HEAD~1 HEAD                     # Diff between commits
+%
+Undo changes or fix mistakes in git.
+
+   git checkout -- file.py                  # Discard uncommitted changes
+   git reset HEAD file.py                   # Unstage file
+   git revert commit_hash                   # Create commit that undoes changes
+   git commit --amend                       # Fix last commit message
+%
+Run Python scripts for data analysis and processing.
+
+   python3 analysis.py                      # Run script
+   python3 -i analysis.py                   # Run and enter interactive mode
+   python3 -m pdb analysis.py               # Run with debugger
+   python3 -u analysis.py | tee output.log  # Unbuffered output
+%
+Use Python for quick calculations and data processing.
+
+   python3 -c "print(137 * 3.14159)"        # Quick calculation
+   python3 -c "import sys; print(sys.path)" # Check Python path
+   python3 -m json.tool data.json           # Format JSON file
+%
+Install Python packages for analysis work.
+
+   pip install --user numpy scipy matplotlib  # Install packages locally
+   pip list                                 # Show installed packages
+   pip show root                            # Show package info
+   pip freeze > requirements.txt            # Save dependencies
+%
+Create virtual environments for isolated Python setups.
+
+   python3 -m venv analysis_env             # Create virtual environment
+   source analysis_env/bin/activate         # Activate environment
+   pip install -r requirements.txt          # Install dependencies
+   deactivate                               # Exit environment
+%
+Run Perl scripts for text processing and automation.
+
+   perl script.pl                           # Run Perl script
+   perl -e 'print "Hello\n"'                # Execute inline Perl
+   perl -pe 's/old/new/g' file.txt          # Edit with Perl one-liner
+   perl -i.bak -pe 's/old/new/g' *.txt      # Edit files in place with backup
+%
+Check what symbols are defined in object files and libraries.
+
+   nm analysis.o                            # List symbols in object file
+   nm -g libAnalysis.so                     # Show only external symbols
+   nm -C analysis.o                         # Demangle C++ symbols
+   nm -D libAnalysis.so                     # Show dynamic symbols
+%
+Disassemble binaries to understand crashes or optimization.
+
+   objdump -d analysis                      # Disassemble executable
+   objdump -S analysis                      # Disassemble with source
+   objdump -t analysis.o                    # Show symbol table
+   objdump -h analysis                      # Show section headers
+%
+Analyze ELF binary structure and dependencies.
+
+   readelf -h analysis                      # Show ELF header
+   readelf -S analysis                      # Show section headers
+   readelf -s analysis                      # Show symbol table
+   readelf -d analysis                      # Show dynamic section
+%
+Generate tags for navigating large C++ codebases.
+
+   ctags -R .                               # Generate tags recursively
+   ctags --languages=C++ -R src/            # C++ files only
+   # In vim: Ctrl-] jumps to definition, Ctrl-T returns
+%
+Navigate and search large analysis codebases with cscope.
+
+   cscope -Rb                               # Build database recursively
+   cscope -d                                # Use existing database
+   # In cscope: find this symbol, find functions calling this
+%
+Use SVN for version control (legacy ATLAS code repositories).
+
+   svn checkout https://svnweb.cern.ch/...  # Check out repository
+   svn update                               # Update working copy
+   svn status                               # Check status
+   svn commit -m "message"                  # Commit changes
+   svn diff                                 # Show changes
+%
+Automate interactive programs like SSH login with expect.
+
+   expect -c 'spawn ssh user@lxplus.cern.ch; expect "password:"; send "pass\r"; interact'
+   # Better: use SSH keys instead of expect for passwords
+%
+Resolve three-way merge conflicts in analysis code.
+
+   diff3 -m mine.py base.py theirs.py > merged.py  # Three-way merge
+   diff3 mine.py base.py theirs.py         # Show conflicts
+%
+Generate parsers for custom file formats with bison.
+
+   bison -d parser.y                        # Generate parser from grammar
+   bison -v parser.y                        # Generate with verbose output
+%
 Keep learning - the terminal is powerful and these are just the basics.
 Combine these commands creatively to build efficient workflows for your
 ATLAS analysis. Happy computing!
