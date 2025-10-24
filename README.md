@@ -1,10 +1,10 @@
 # ATLAS Linux Tips Fortune File
 
-A curated collection of 270 Linux command tips specifically tailored for ATLAS physicists working at the UChicago Analysis Facility. These tips cover essential commands and workflows for data analysis, remote work, file management, and system monitoring.
+A curated collection of 358 Linux command tips specifically tailored for ATLAS physicists working at the UChicago Analysis Facility. These tips cover essential commands and workflows for data analysis, remote work, file management, and system monitoring.
 
 ## Features
 
-- **270 practical tips** covering everyday Linux usage
+- **358 practical tips** covering everyday Linux usage
 - **ATLAS-specific context** with examples using `.root` files, `lxplus.cern.ch`, and analysis workflows
 - **Beginner to advanced** topics including:
   - File viewing and manipulation (`cat`, `less`, `grep`, `find`)
@@ -14,6 +14,10 @@ A curated collection of 270 Linux command tips specifically tailored for ATLAS p
   - Text processing (`sed`, `awk`, `cut`, `sort`)
   - Bash scripting tips and best practices
   - Performance monitoring and debugging
+  - Development tools (`gcc`, `g++`, `make`, `cmake`, `gdb`)
+  - Version control (`git`, `svn`)
+  - Programming languages (`python`, `perl`)
+  - Code analysis and navigation (`nm`, `objdump`, `readelf`, `ctags`, `cscope`)
 
 ## Installation
 
