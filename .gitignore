@@ -1,0 +1,6 @@
+/CLAUDE.md
+/atlas-tips.dat
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml

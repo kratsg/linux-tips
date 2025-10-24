@@ -1,0 +1,31 @@
+on: pull_request
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref }}
+
+      - uses: prefix-dev/setup-pixi@v0.9.1
+        with:
+          pixi-version: v0.49.0
+
+      - name: Generate dat file
+        run: pixi run build
+
+      - name: Commit and push
+        run: |
+          if ! git diff-index --quiet HEAD; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -f atlas-tips.dat
+            git commit -m "regenerate atlas-tips.dat"
+            git push
+          else
+            echo "✅ atlas-tips.dat is up to date!"
+          fi
+
