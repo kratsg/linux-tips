@@ -10,15 +10,39 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - uses: prefix-dev/setup-pixi@v0.9.1
-        with:
-          pixi-version: v0.49.0
+      - name: Install fortune (and strfile)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fortune-mod
 
-      - name: Generate dat file
-        run: pixi run build
+      - name: Build .dat file
+        run: |
+          strfile ./atlas-tips ./atlas-tips.dat
+          ls -lh ./atlas-tips.dat
 
       - name: Test
-        run: pixi run test
+        run: fortune $PWD/atlas-tips
+
+      - name: Test random tips uniqueness
+        run: |
+          TOTAL_TIPS=$(grep '^%$' atlas-tips | wc -l)        # total tips in the file
+          SAMPLE_SIZE=50        # number of random tips to sample
+          MAX_REPEAT=4          # tolerate <= 4 repeats
+
+          echo "Sampling $SAMPLE_SIZE random tips from $TOTAL_TIPS available tips..."
+          tips=$(for i in $(seq 1 $SAMPLE_SIZE); do
+            fortune $PWD/atlas-tips | head -n 1
+          done)
+
+          echo "$tips" | sort | uniq -c | sort -nr
+
+          repeats=$(echo "$tips" | sort | uniq -c | awk -v max=$MAX_REPEAT '$1>max {sum+=$1} END {print sum+0}')
+          if [ "$repeats" -gt 0 ]; then
+            echo "❌ Found $repeats tip(s) repeated more than $MAX_REPEAT times in $SAMPLE_SIZE samples"
+            exit 1
+          else
+            echo "✅ Randomness test passed (no tip repeated more than $MAX_REPEAT times)"
+          fi
 
       - name: Commit and push
         run: |
