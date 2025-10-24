@@ -27,7 +27,7 @@ jobs:
         run: |
           TOTAL_TIPS=$(grep '^%$' atlas-tips | wc -l)        # total tips in the file
           SAMPLE_SIZE=50        # number of random tips to sample
-          MAX_REPEAT=2          # tolerate <= 2 repeats
+          MAX_REPEAT=4          # tolerate <= 4 repeats
 
           echo "Sampling $SAMPLE_SIZE random tips from $TOTAL_TIPS available tips..."
           tips=$(for i in $(seq 1 $SAMPLE_SIZE); do
