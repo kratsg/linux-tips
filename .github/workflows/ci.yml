@@ -17,6 +17,9 @@ jobs:
       - name: Generate dat file
         run: pixi run build
 
+      - name: Test
+        run: pixi run test
+
       - name: Commit and push
         run: |
           git add -f atlas-tips.dat
