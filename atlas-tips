@@ -1,0 +1,1838 @@
+View file contents with different tools for different needs.
+
+   cat data.root           # Print entire file
+   less data.root          # Browse file (q to quit, / to search, g/G for top/bottom)
+   head -n 20 output.log   # View first 20 lines
+   tail -f job.log         # Follow log file as it grows
+%
+The tail -f command is invaluable for monitoring running jobs in real-time.
+
+   tail -f batch_job.log
+   tail -f nohup.out | grep ERROR
+%
+Count lines, words, and bytes in files quickly.
+
+   wc analysis.log              # Show lines, words, bytes
+   wc -l *.txt                  # Count lines in all text files
+%
+Navigate directories efficiently using shortcuts.
+
+   cd                      # Go to home directory
+   cd -                    # Return to previous directory
+   cd ../..                # Go up two levels
+%
+List files with useful options for finding what you need.
+
+   ls -lh                  # Long format with human-readable sizes
+   ls -lt                  # Sort by modification time, newest first
+   ls -lS                  # Sort by file size, largest first
+   ls -la                  # Show hidden files too
+%
+The find command is powerful for locating files across your datasets.
+
+   find . -name "*.root"                    # Find all ROOT files
+   find . -type f -mtime -7                 # Files modified in last 7 days
+   find . -size +1G                         # Files larger than 1GB
+   find /data -name "*.root" -exec ls -lh {} \;
+%
+Search file contents with grep and its variants.
+
+   grep "ERROR" job.log                     # Find errors in log file
+   grep -i "warning" *.log                  # Case-insensitive search
+   grep -r "dataset" .                      # Recursive search in directory
+   grep -v "DEBUG" output.log               # Show lines NOT matching pattern
+%
+Advanced grep options for better searching.
+
+   grep -n "FATAL" job.log                  # Show line numbers
+   grep -c "Event" data.log                 # Count matching lines
+   grep -A 3 -B 3 "ERROR" job.log           # Show 3 lines before/after match
+%
+Copy files and directories with various options.
+
+   cp analysis.py backup.py                 # Copy file
+   cp -r dataset/ backup_dataset/           # Copy directory recursively
+   cp -p file.root dest/                    # Preserve timestamps and permissions
+%
+Move or rename files efficiently.
+
+   mv old_name.root new_name.root           # Rename file
+   mv *.root data/                          # Move all ROOT files to directory
+   mv analysis_{old,new}.py                 # Rename using brace expansion
+%
+Remove files and directories safely.
+
+   rm unwanted.log                          # Delete file
+   rm -i *.tmp                              # Interactive deletion (asks confirmation)
+   rm -r old_analysis/                      # Remove directory and contents
+%
+Create directories including parent paths in one command.
+
+   mkdir -p data/2024/january/run01         # Create nested directories
+   mkdir backup_{jan,feb,mar}               # Create multiple directories
+%
+Check disk space usage to avoid filling up storage.
+
+   df -h                                    # Show disk space on all filesystems
+   df -h /data                              # Check specific filesystem
+   df -i                                    # Show inode usage
+%
+Find out which directories are using the most space.
+
+   du -h --max-depth=1 | sort -hr           # Show directory sizes, sorted
+   du -sh */                                # Summary of each subdirectory
+   du -h . | sort -hr | head -20            # Find 20 largest items
+%
+Compress and archive files for storage or transfer.
+
+   tar -czf analysis_2024.tar.gz analysis/  # Create compressed archive
+   tar -xzf data.tar.gz                     # Extract compressed archive
+   tar -tzf archive.tar.gz                  # List contents without extracting
+%
+Work with different compression formats.
+
+   gzip large_file.txt                      # Compress file (creates .gz)
+   gunzip file.txt.gz                       # Decompress
+   bzip2 huge_dataset.root                  # Better compression, slower
+   bunzip2 file.bz2                         # Decompress bzip2
+%
+Unzip archives and handle zip files.
+
+   unzip data.zip                           # Extract zip file
+   unzip -l archive.zip                     # List contents
+   unzip data.zip -d /target/dir            # Extract to specific directory
+%
+Connect to remote machines securely with SSH.
+
+   ssh username@lxplus.cern.ch              # Connect to remote host
+   ssh -X user@remote                       # Enable X11 forwarding for GUIs
+   ssh -p 2222 user@host                    # Connect to non-standard port
+%
+Copy files securely between machines with scp.
+
+   scp data.root user@lxplus:~/analysis/    # Copy to remote
+   scp user@lxplus:~/results.txt .          # Copy from remote
+   scp -r analysis/ user@remote:~/          # Copy directory recursively
+%
+Synchronize files and directories efficiently with rsync.
+
+   rsync -avz local/ user@remote:~/backup/  # Sync to remote, compressed
+   rsync -avz --delete src/ dest/           # Mirror directories (delete extra files)
+   rsync -av --progress large.root remote:/ # Show transfer progress
+%
+View running processes and their resource usage.
+
+   ps aux                                   # List all processes
+   ps aux | grep python                     # Find Python processes
+   ps -u $USER                              # Show only your processes
+%
+Monitor system resources interactively with top.
+
+   top                                      # Interactive process viewer (q to quit)
+   top -u username                          # Show processes for specific user
+   htop                                     # Better interactive viewer (if available)
+%
+Kill processes gracefully or forcefully when needed.
+
+   kill 12345                               # Terminate process (PID 12345)
+   kill -9 12345                            # Force kill process
+   killall python                           # Kill all processes named python
+   pkill -f "analysis.py"                   # Kill by matching command line
+%
+Run long-running jobs that survive logout.
+
+   nohup ./long_analysis.sh &               # Run in background, survives logout
+   nohup python analysis.py > output.log 2>&1 &  # Redirect all output
+%
+Manage job priority with nice and renice.
+
+   nice -n 19 ./heavy_analysis.sh           # Run with lowest priority
+   renice -n 10 -p 12345                    # Change priority of running process
+%
+Put current process in background and bring back to foreground.
+
+   Ctrl+Z                                   # Suspend current process
+   bg                                       # Resume in background
+   fg                                       # Bring to foreground
+   jobs                                     # List background jobs
+%
+Use screen to maintain persistent sessions on remote machines.
+
+   screen                                   # Start new session
+   screen -S analysis                       # Start named session
+   Ctrl+a, d                                # Detach from session
+   screen -r                                # Reattach to session
+   screen -ls                               # List all sessions
+%
+Use tmux as a modern alternative to screen.
+
+   tmux                                     # Start new session
+   tmux new -s analysis                     # Start named session
+   Ctrl+b, d                                # Detach from session
+   tmux attach -t analysis                  # Reattach to session
+   tmux ls                                  # List sessions
+%
+View system information useful for debugging environment issues.
+
+   uname -a                                 # Show all system information
+   uname -r                                 # Show kernel version
+   hostname                                 # Show machine name
+   whoami                                   # Show current username
+%
+Check memory usage to ensure your jobs have enough RAM.
+
+   free -h                                  # Show memory usage (human-readable)
+   free -h -s 5                             # Update every 5 seconds
+%
+Search command history for previously used commands.
+
+   history                                  # Show all recent commands
+   history | grep ssh                       # Find previous SSH commands
+   !123                                     # Run command #123 from history
+   !!                                       # Run previous command
+   !$                                       # Use last argument of previous command
+%
+Use Ctrl+R for reverse interactive search through history.
+
+   Ctrl+R                                   # Start reverse search
+   (type search term)                       # Find matching commands
+   Enter                                    # Execute found command
+%
+Create aliases for frequently used commands.
+
+   alias ll='ls -lah'                       # Create shortcut
+   alias lx='ls -lXB'                       # Sort by extension
+   alias lt='ls -lt | head -20'             # Recent files
+   # Add to ~/.bashrc to make permanent
+%
+Download files from the web with wget or curl.
+
+   wget https://example.com/data.root       # Download file
+   wget -c URL                              # Continue interrupted download
+   curl -O https://example.com/file.txt     # Download with curl
+   curl -L URL                              # Follow redirects
+%
+Check network connectivity and response times.
+
+   ping -c 5 lxplus.cern.ch                 # Ping 5 times then stop
+   ping google.com                          # Continuous ping (Ctrl+C to stop)
+%
+Trace network route to diagnose connection issues.
+
+   traceroute lxplus.cern.ch                # Show route to host
+   mtr google.com                           # Continuous traceroute (if available)
+%
+Sort file contents in various ways.
+
+   sort data.txt                            # Sort alphabetically
+   sort -n numbers.txt                      # Sort numerically
+   sort -r file.txt                         # Reverse sort
+   sort -u data.txt                         # Sort and remove duplicates
+%
+Remove duplicate lines from sorted files.
+
+   sort data.txt | uniq                     # Remove adjacent duplicates
+   sort data.txt | uniq -c                  # Count occurrences
+   sort data.txt | uniq -d                  # Show only duplicates
+%
+Extract specific columns from delimited files.
+
+   cut -d',' -f1,3 data.csv                 # Extract columns 1 and 3
+   cut -d':' -f1 /etc/passwd                # Extract first field
+   cut -c1-10 file.txt                      # Extract first 10 characters
+%
+Use awk for powerful text processing.
+
+   awk '{print $1}' data.txt                # Print first column
+   awk -F',' '{print $2}' data.csv          # Use comma as delimiter
+   awk '$3 > 100' data.txt                  # Print lines where column 3 > 100
+   awk '{sum+=$1} END {print sum}' nums.txt # Sum first column
+%
+Find and replace text with sed.
+
+   sed 's/old/new/' file.txt                # Replace first occurrence per line
+   sed 's/old/new/g' file.txt               # Replace all occurrences
+   sed -i 's/error/ERROR/g' file.txt        # Edit file in-place
+   sed -n '10,20p' file.txt                 # Print lines 10-20
+%
+Chain commands together with pipes for powerful workflows.
+
+   cat data.txt | grep pattern | sort | uniq -c
+   ps aux | grep python | awk '{print $2}' | xargs kill
+   find . -name "*.log" | xargs grep ERROR
+%
+Redirect output to files for logging and analysis.
+
+   command > output.txt                     # Redirect stdout, overwrite
+   command >> output.txt                    # Redirect stdout, append
+   command 2> errors.txt                    # Redirect stderr only
+   command &> all_output.txt                # Redirect both stdout and stderr
+%
+Use tee to output to both file and terminal simultaneously.
+
+   ./analysis.sh | tee output.log           # Show and save output
+   command | tee -a log.txt                 # Append instead of overwrite
+%
+Chain commands conditionally based on success or failure.
+
+   make && ./run_analysis.sh                # Run second only if first succeeds
+   command1 || command2                     # Run second only if first fails
+   command1 ; command2                      # Run both regardless
+%
+Check the exit status of the last command.
+
+   echo $?                                  # 0 = success, non-zero = failure
+%
+Find files and execute commands on them.
+
+   find . -name "*.tmp" -delete             # Find and delete
+   find . -name "*.root" -exec du -h {} \;  # Show size of each file
+   find . -type f -empty                    # Find empty files
+%
+Locate files quickly using the locate database.
+
+   locate analysis.py                       # Fast filename search
+   locate -i ATLAS                          # Case-insensitive search
+   sudo updatedb                            # Update locate database
+%
+Determine file types when extensions are unclear.
+
+   file unknown_file                        # Identify file type
+   file *.dat                               # Check type of multiple files
+%
+Create symbolic links to access files from multiple locations.
+
+   ln -s /long/path/to/file.root link.root  # Create symbolic link
+   ln -sf target newlink                    # Force create, overwrite existing
+%
+Check file and directory permissions.
+
+   ls -l file.root                          # Show permissions
+   stat file.root                           # Detailed file information
+%
+Change file permissions for security and access control.
+
+   chmod +x script.sh                       # Make executable
+   chmod 755 program                        # rwxr-xr-x
+   chmod 644 data.txt                       # rw-r--r--
+   chmod -R 755 directory/                  # Recursive
+%
+Change file ownership when needed.
+
+   chown user:group file.root               # Change owner and group
+   chown -R user directory/                 # Recursive ownership change
+%
+Compare files to find differences.
+
+   diff file1.txt file2.txt                 # Show differences
+   diff -u old.txt new.txt                  # Unified format (like git)
+   diff -r dir1/ dir2/                      # Compare directories
+%
+Compare binary files byte by byte.
+
+   cmp file1.root file2.root                # Compare binary files
+%
+View compressed files without extracting.
+
+   zcat file.gz                             # View gzipped file
+   zless file.gz                            # Browse gzipped file
+   bzcat file.bz2                           # View bzip2 file
+%
+Search within compressed files.
+
+   zgrep "pattern" file.gz                  # Grep in gzipped file
+   zgrep -i "error" *.gz                    # Case-insensitive search in all .gz files
+%
+Monitor log files from multiple sources simultaneously.
+
+   tail -f job1.log job2.log                # Follow multiple files
+   tail -f *.log                            # Follow all log files
+%
+Calculate checksums to verify file integrity.
+
+   md5sum file.root                         # Calculate MD5 hash
+   sha256sum important.data                 # Calculate SHA256 hash
+   md5sum -c checksums.txt                  # Verify against checksum file
+%
+Split large files into smaller pieces for transfer.
+
+   split -b 1G large.root part_             # Split into 1GB pieces
+   split -l 1000 file.txt chunk_            # Split every 1000 lines
+   cat part_* > reassembled.root            # Reassemble pieces
+%
+Count specific patterns in files.
+
+   grep -c "Event" data.log                 # Count matching lines
+   grep -o "ERROR" file.log | wc -l         # Count occurrences in file
+%
+Show only filename of files containing pattern.
+
+   grep -l "pattern" *.txt                  # List filenames with matches
+   grep -L "pattern" *.txt                  # List filenames without matches
+%
+Use xargs to build and execute commands from input.
+
+   find . -name "*.tmp" | xargs rm          # Delete found files
+   cat files.txt | xargs -I {} cp {} backup/  # Copy files listed in file
+%
+Display calendar and date information.
+
+   cal                                      # Show current month
+   cal 2024                                 # Show full year
+   date                                     # Show current date and time
+   date +%Y%m%d                             # Format date (20240101)
+%
+Time command execution to optimize your analysis.
+
+   time ./analysis.sh                       # Show execution time
+   time python process_data.py              # Time Python script
+%
+Run command with timeout to prevent hangs.
+
+   timeout 1h ./long_job.sh                 # Kill if exceeds 1 hour
+   timeout 300 python script.py             # Kill after 300 seconds
+%
+Display file in octal, hex, or other formats.
+
+   xxd file.dat | less                      # Hex dump
+   od -c file.dat                           # Octal dump with characters
+%
+Monitor directory for changes (if available).
+
+   watch -n 5 ls -l                         # Run ls every 5 seconds
+   watch -d -n 1 "df -h"                    # Highlight differences
+%
+Show open files and which processes are using them.
+
+   lsof | grep data.root                    # What's using this file?
+   lsof -u username                         # Files opened by user
+   lsof -i :8080                            # What's using port 8080?
+%
+Find which package provides a command.
+
+   which python                             # Show path to command
+   whereis python                           # Show binary, source, man page
+   type python                              # Show command type and location
+%
+Get quick help on commands.
+
+   man ls                                   # Full manual page
+   whatis ls                                # Brief description
+   apropos search                           # Find commands by keyword
+   command --help                           # Command's help message
+%
+Environment variables are key for configuring your analysis environment.
+
+   echo $PATH                               # Show search path
+   echo $HOME                               # Show home directory
+   env                                      # Show all environment variables
+   export VAR=value                         # Set environment variable
+%
+Modify PATH to include your custom scripts.
+
+   export PATH=$PATH:$HOME/bin              # Add directory to PATH
+   # Add to ~/.bashrc to make permanent
+%
+Quickly create multiple test files or directories.
+
+   touch file_{1..10}.txt                   # Create file_1.txt through file_10.txt
+   mkdir run_{001..100}                     # Create 100 directories
+%
+Use brace expansion for efficient command construction.
+
+   cp file.txt{,.backup}                    # Same as: cp file.txt file.txt.backup
+   mv config.{old,new}                      # Rename config.old to config.new
+%
+Clear terminal screen when it gets cluttered.
+
+   clear                                    # Clear screen (Ctrl+L also works)
+%
+View recent login history.
+
+   last                                     # Show recent logins
+   last -n 10                               # Show last 10 logins
+   lastlog                                  # Last login for all users
+%
+Check current users logged into system.
+
+   who                                      # Show logged in users
+   w                                        # Show users and what they're doing
+   users                                    # Simple list of users
+%
+Check system uptime and load average.
+
+   uptime                                   # Show uptime and load
+%
+View kernel messages and boot logs.
+
+   dmesg                                    # Show kernel ring buffer
+   dmesg | grep -i error                    # Find kernel errors
+   dmesg | tail -50                         # Show recent kernel messages
+%
+Securely edit files on remote systems.
+
+   scp file.txt remote:~/ && ssh remote "nano file.txt"
+   ssh remote "cat > file.txt" < local_file.txt
+%
+Create temporary files safely.
+
+   mktemp                                   # Create temp file
+   mktemp -d                                # Create temp directory
+%
+Run commands in parallel for faster processing (if GNU parallel available).
+
+   parallel gzip ::: *.txt                  # Compress files in parallel
+   find . -name "*.root" | parallel process_file.sh {}
+%
+Monitor network interfaces and bandwidth.
+
+   ifconfig                                 # Show network interfaces (older systems)
+   ip addr                                  # Show IP addresses (modern systems)
+   ip route                                 # Show routing table
+%
+Check listening ports and connections.
+
+   netstat -tuln                            # Show listening ports
+   ss -tuln                                 # Modern alternative to netstat
+   lsof -i                                  # Show network connections
+%
+Send test data through network.
+
+   nc -l 1234                               # Listen on port 1234
+   nc hostname 1234 < data.txt              # Send data to port
+%
+Quick calculation in the terminal.
+
+   bc                                       # Calculator (type quit to exit)
+   echo "scale=2; 22/7" | bc                # Calculate with precision
+%
+Generate random data or numbers.
+
+   head -c 100 /dev/urandom | base64        # Random base64 string
+   shuf -i 1-100 -n 1                       # Random number between 1-100
+%
+Repeat a command multiple times.
+
+   for i in {1..10}; do echo "Run $i"; done
+   while true; do date; sleep 60; done      # Every minute forever
+%
+Watch command output and repeat automatically.
+
+   watch df -h                              # Update disk usage every 2 sec
+   watch -n 10 'ps aux | grep python'       # Every 10 seconds
+%
+Print system resource limits.
+
+   ulimit -a                                # Show all limits
+   ulimit -n                                # Show max open files
+   ulimit -n 4096                           # Set max open files (current shell)
+%
+Safely remove files by overwriting (if security needed).
+
+   shred -u sensitive_data.txt              # Overwrite and delete
+   shred -n 10 file.txt                     # Overwrite 10 times
+%
+Join lines of two files on a common field.
+
+   join file1.txt file2.txt                 # Join on first field
+   join -t',' -1 2 -2 1 file1.csv file2.csv # Complex join
+%
+Paste files line by line side by side.
+
+   paste file1.txt file2.txt                # Merge lines horizontally
+   paste -d',' file1.txt file2.txt          # Use comma delimiter
+%
+Translate or delete characters in text.
+
+   tr 'a-z' 'A-Z' < file.txt                # Convert to uppercase
+   tr -d ' ' < file.txt                     # Remove all spaces
+   tr -s ' ' < file.txt                     # Squeeze multiple spaces to one
+%
+Reverse lines or characters.
+
+   tac file.txt                             # Reverse line order (reverse of cat)
+   rev file.txt                             # Reverse characters in each line
+%
+Number the lines of a file.
+
+   nl file.txt                              # Add line numbers
+   nl -ba file.txt                          # Number all lines including blank
+%
+Expand tabs to spaces or vice versa.
+
+   expand file.txt                          # Convert tabs to spaces
+   unexpand -a file.txt                     # Convert spaces to tabs
+%
+Format text to specific width.
+
+   fold -w 80 file.txt                      # Wrap at 80 characters
+   fmt -w 72 file.txt                       # Format and wrap at 72 chars
+%
+Print selected parts of lines.
+
+   awk '{print $NF}' file.txt               # Print last field
+   awk '{print $(NF-1)}' file.txt           # Print second-to-last field
+%
+Calculate statistics on numerical data.
+
+   awk '{sum+=$1; sumsq+=$1*$1} END {print "Mean:", sum/NR, "StdDev:", sqrt(sumsq/NR - (sum/NR)^2)}' data.txt
+%
+Use comm to compare sorted files.
+
+   comm file1.txt file2.txt                 # Show unique and common lines
+   comm -12 file1.txt file2.txt             # Show only common lines
+   comm -3 file1.txt file2.txt              # Show only unique lines
+%
+Monitor I/O statistics.
+
+   iostat                                   # Show CPU and I/O stats
+   iostat -x 5                              # Extended stats every 5 seconds
+%
+Check storage device I/O performance.
+
+   hdparm -tT /dev/sda                      # Test disk read speed (need sudo)
+%
+View block devices and partitions.
+
+   lsblk                                    # List block devices
+   lsblk -f                                 # Show filesystems too
+%
+Monitor bandwidth usage per process (if available).
+
+   iotop                                    # Like top for I/O
+   iftop                                    # Monitor network bandwidth
+%
+Get detailed CPU information.
+
+   lscpu                                    # Display CPU architecture
+   cat /proc/cpuinfo                        # Detailed CPU info
+%
+Display PCI devices.
+
+   lspci                                    # List PCI devices
+   lspci -v                                 # Verbose output
+%
+Display USB devices.
+
+   lsusb                                    # List USB devices
+   lsusb -v                                 # Verbose output
+%
+Check loaded kernel modules.
+
+   lsmod                                    # List loaded modules
+   modinfo module_name                      # Info about module
+%
+Display SELinux or AppArmor status (if present).
+
+   getenforce                               # SELinux status
+   sestatus                                 # Detailed SELinux status
+   aa-status                                # AppArmor status
+%
+Benchmark and stress test your system (if installed).
+
+   stress --cpu 4 --timeout 60s             # CPU stress test
+   sysbench cpu run                         # CPU benchmark
+%
+Use rsync for efficient directory syncing and backups.
+
+   rsync -av --dry-run src/ dst/            # Test run without changes
+   rsync -av --exclude='*.tmp' src/ dst/    # Exclude patterns
+   rsync -av --delete src/ dst/             # Mirror (delete extra files)
+%
+Check certificate information for SSL/TLS.
+
+   openssl s_client -connect host:443 < /dev/null
+   openssl x509 -in cert.pem -text -noout  # View certificate details
+%
+Encode and decode base64 data.
+
+   echo "text" | base64                     # Encode to base64
+   echo "dGV4dAo=" | base64 -d              # Decode from base64
+%
+Extract information from JSON (if jq available).
+
+   cat data.json | jq '.'                   # Pretty-print JSON
+   cat data.json | jq '.field'              # Extract specific field
+%
+Work with CSV files.
+
+   column -t -s',' file.csv                 # Pretty-print CSV as table
+   awk -F',' '{print $2}' file.csv          # Extract column from CSV
+%
+Convert line endings between Unix and Windows.
+
+   dos2unix file.txt                        # Convert Windows to Unix
+   unix2dos file.txt                        # Convert Unix to Windows
+%
+Display a tree view of directory structure (if available).
+
+   tree                                     # Show directory tree
+   tree -L 2                                # Limit depth to 2 levels
+   tree -d                                  # Directories only
+%
+Archive and compress in one step with tar.
+
+   tar -czf backup.tar.gz --exclude='*.tmp' directory/
+   tar -cjf backup.tar.bz2 directory/       # Use bzip2 for better compression
+   tar -xf archive.tar.gz -C /target/dir    # Extract to specific location
+%
+View tar archive contents without extracting.
+
+   tar -tzf archive.tar.gz                  # List gzipped tar contents
+   tar -tjf archive.tar.bz2                 # List bzip2 tar contents
+%
+Resume interrupted downloads with wget.
+
+   wget -c URL                              # Continue download
+   wget -b URL                              # Background download
+   wget -i urls.txt                         # Download list of URLs
+%
+Advanced curl usage for data downloads.
+
+   curl -L -o output.file URL               # Follow redirects, specify output
+   curl -H "Authorization: Bearer TOKEN" URL
+   curl -X POST -d "data=value" URL         # POST request
+%
+Check if command exists before using it.
+
+   command -v command_name &> /dev/null && echo "exists" || echo "not found"
+   which command_name || echo "Not installed"
+%
+Source a file to load environment variables.
+
+   source ~/.bashrc                         # Reload bash configuration
+   . ./setup.sh                             # Source using dot notation
+%
+Use printf for formatted output.
+
+   printf "%s\n" "text"                     # Print with newline
+   printf "%.2f\n" $number                  # Print float with 2 decimals
+   printf "%10s %5d\n" "Name" 42            # Formatted columns
+%
+Read user input in shell scripts.
+
+   read -p "Enter value: " variable         # Prompt and read
+   read -s password                         # Silent input for passwords
+   read -t 10 response                      # Timeout after 10 seconds
+%
+Test file properties in conditionals.
+
+   [ -f file.txt ] && echo "File exists"
+   [ -d directory ] && echo "Directory exists"
+   [ -r file.txt ] && echo "Readable"
+   [ -w file.txt ] && echo "Writable"
+   [ -x script.sh ] && echo "Executable"
+%
+Compare strings and numbers in shell.
+
+   [ "$var" = "value" ] && echo "Match"     # String comparison
+   [ $num -eq 42 ] && echo "Equal"          # Numeric comparison
+   [ $num -gt 100 ] && echo "Greater"       # Greater than
+%
+Use arrays in bash for managing lists.
+
+   arr=(one two three)                      # Create array
+   echo ${arr[0]}                           # First element
+   echo ${arr[@]}                           # All elements
+   echo ${#arr[@]}                          # Array length
+%
+Iterate over array elements.
+
+   for item in "${arr[@]}"; do echo $item; done
+   for i in "${!arr[@]}"; do echo "$i: ${arr[$i]}"; done  # With indices
+%
+Parameter expansion for string manipulation.
+
+   ${var#pattern}                           # Remove shortest match from start
+   ${var##pattern}                          # Remove longest match from start
+   ${var%pattern}                           # Remove shortest match from end
+   ${var%%pattern}                          # Remove longest match from end
+   ${var/pattern/replacement}               # Replace first match
+   ${var//pattern/replacement}              # Replace all matches
+%
+Default values and error checking for variables.
+
+   ${var:-default}                          # Use default if var unset
+   ${var:=default}                          # Assign default if var unset
+   ${var:?error message}                    # Error if var unset
+%
+Substring extraction from variables.
+
+   ${var:offset}                            # Substring from offset
+   ${var:offset:length}                     # Substring with length
+   filename="data.root"
+   ${filename%.root}                        # Remove extension: "data"
+%
+Get length of string.
+
+   echo ${#variable}                        # String length
+%
+Case conversion in bash (version 4+).
+
+   ${var^^}                                 # Convert to uppercase
+   ${var,,}                                 # Convert to lowercase
+%
+Process substitution for comparing command outputs.
+
+   diff <(command1) <(command2)             # Compare outputs
+   while read line; do echo $line; done < <(command)
+%
+Here documents for multi-line input.
+
+   cat << EOF > file.txt
+   Line 1
+   Line 2
+   EOF
+%
+Use screen/tmux for persistent remote sessions.
+
+   # Screen: Ctrl+a c (new window), Ctrl+a n (next), Ctrl+a p (previous)
+   # Tmux: Ctrl+b c (new window), Ctrl+b n (next), Ctrl+b p (previous)
+%
+Share screen/tmux session for collaboration.
+
+   screen -x session_name                   # Multi-user attach (screen)
+   tmux attach -t session_name              # Attach to session (tmux)
+%
+Monitor network traffic in real-time.
+
+   tcpdump -i eth0                          # Capture on interface
+   tcpdump -i eth0 port 22                  # Capture SSH traffic only
+   tcpdump -w capture.pcap                  # Save to file
+%
+Quick HTTP server for file sharing (Python).
+
+   python3 -m http.server 8000              # Serve current directory
+   python -m SimpleHTTPServer 8000          # Python 2 version
+%
+Verify hash/checksum matches for downloaded files.
+
+   md5sum data.root > checksums.md5         # Create checksum
+   md5sum -c checksums.md5                  # Verify files
+   sha256sum file.tar.gz                    # SHA256 checksum
+%
+Mount and unmount filesystems.
+
+   mount                                    # Show all mounts
+   mount /dev/sdb1 /mnt/usb                 # Mount device (need sudo)
+   umount /mnt/usb                          # Unmount (need sudo)
+%
+Synchronize cached writes to disk.
+
+   sync                                     # Flush filesystem buffers
+%
+Display kernel ring buffer continuously.
+
+   dmesg -w                                 # Follow kernel messages
+   dmesg -T                                 # Show timestamps
+%
+Trace system calls of a process.
+
+   strace command                           # Trace command's system calls
+   strace -p 1234                           # Attach to running process
+   strace -e open command                   # Trace only open calls
+%
+Debug library dependencies.
+
+   ldd /path/to/binary                      # Show shared library dependencies
+%
+Find the process using the most CPU or memory.
+
+   ps aux --sort=-%cpu | head               # Top CPU users
+   ps aux --sort=-%mem | head               # Top memory users
+%
+Nice one-liner to find large files.
+
+   find . -type f -size +100M -exec ls -lh {} \; | awk '{print $5, $9}' | sort -hr
+%
+Monitor file changes in real-time (if inotify available).
+
+   inotifywait -m /path/to/watch            # Monitor directory
+   inotifywait -e modify,create,delete -m /path/
+%
+Show directory sizes sorted by size.
+
+   du -h --max-depth=1 . | sort -hr
+   du -sh */ | sort -hr                     # Shorter version
+%
+Count files in directory tree.
+
+   find . -type f | wc -l                   # Count all files
+   find . -name "*.root" | wc -l            # Count ROOT files
+%
+Find and delete old temporary files.
+
+   find /tmp -name "*.tmp" -mtime +7 -delete  # Delete .tmp older than 7 days
+   find . -name "core" -delete              # Delete core dumps
+%
+Use GNU parallel for parallel job execution (if available).
+
+   ls *.root | parallel -j 4 process.sh {}  # Process 4 files at a time
+   parallel -j+0 process.sh ::: file1 file2 file3  # Use all cores
+%
+Quick benchmarking of command execution.
+
+   time for i in {1..1000}; do command; done  # Time 1000 runs
+%
+Monitor temperature sensors (if available).
+
+   sensors                                  # Show all sensors
+   watch -n 2 sensors                       # Monitor every 2 seconds
+%
+Display NVIDIA GPU status (if NVIDIA GPU present).
+
+   nvidia-smi                               # GPU status and usage
+   watch -n 1 nvidia-smi                    # Monitor continuously
+%
+Determine what's taking up disk space.
+
+   ncdu                                     # Interactive disk usage (if available)
+   du -ah . | sort -rh | head -50           # Top 50 disk space users
+%
+Compare directory trees.
+
+   diff -qr dir1/ dir2/                     # Quick comparison
+   rsync -avn dir1/ dir2/                   # Show what would sync
+%
+Mass rename files with rename or mv loop.
+
+   for f in *.txt; do mv "$f" "${f%.txt}.bak"; done
+   rename 's/\.txt$/.bak/' *.txt            # If rename available
+%
+Execute command on many files efficiently.
+
+   find . -name "*.root" -print0 | xargs -0 -P 4 -I {} process.sh {}
+%
+Background job management tips.
+
+   jobs -l                                  # List jobs with PIDs
+   disown %1                                # Remove job from shell's job table
+   nohup command &                          # Start detached from terminal
+%
+Redirect both stdout and stderr to different files.
+
+   command > stdout.log 2> stderr.log
+   command > output.log 2>&1                # Both to same file
+   command &> all.log                       # Shorthand for both
+%
+Suppress all output from a command.
+
+   command > /dev/null 2>&1                 # Discard everything
+   command &> /dev/null                     # Shorthand
+%
+Pipeline multiple commands for complex processing.
+
+   cat data.txt | grep -v "^#" | cut -f1,3 | sort -n | uniq | wc -l
+%
+Use head and tail together to extract specific lines.
+
+   head -n 50 file.txt | tail -n 10         # Lines 41-50
+   sed -n '41,50p' file.txt                 # Alternative using sed
+%
+Generate sequences for loops and filenames.
+
+   seq 1 10                                 # Numbers 1 to 10
+   seq -f "file_%03g.txt" 1 100             # Formatted filenames
+   seq 0 0.1 1                              # Decimal sequence
+%
+Validate analysis environment before running.
+
+   command -v root && command -v python3 && echo "Environment OK"
+%
+Set up environment for ATLAS analysis (example).
+
+   export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
+   source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+%
+Check ROOT installation and version.
+
+   root-config --version                    # ROOT version
+   root-config --cflags                     # Compiler flags
+   root-config --libs                       # Libraries
+%
+Quickly test if data files are accessible.
+
+   [ -r data.root ] && echo "Can read" || echo "Cannot access"
+   timeout 5 head -c 1000 data.root > /dev/null && echo "OK"
+%
+Find recently modified analysis files.
+
+   find ~/analysis -mtime -1 -ls            # Modified in last 24 hours
+   find . -name "*.py" -mtime -7            # Python files from last week
+%
+Estimate remaining time for long transfers.
+
+   rsync -av --info=progress2 large.root remote:/
+   pv large.root | ssh remote "cat > large.root"  # If pv available
+%
+Check if you're running out of inodes.
+
+   df -i                                    # Show inode usage
+   df -i /data                              # Check specific filesystem
+%
+Clean up job outputs safely.
+
+   find . -name "nohup.out" -mtime +30 -delete
+   find . -name "slurm-*.out" -mtime +7 -ls  # List old job outputs
+%
+Compress logs to save space.
+
+   gzip *.log                               # Compress all logs
+   find . -name "*.log" -mtime +7 -exec gzip {} \;  # Auto-compress old logs
+%
+Get information about current terminal.
+
+   tty                                      # Show terminal device
+   echo $TERM                               # Terminal type
+   stty size                                # Terminal dimensions (rows cols)
+%
+Repeat command until it succeeds.
+
+   until command; do sleep 5; done          # Retry every 5 seconds
+   while ! command; do sleep 10; done       # Alternative syntax
+%
+Run command at low priority to avoid impacting others.
+
+   nice -n 19 cpu_intensive_job             # Lowest priority (19)
+   ionice -c3 io_intensive_job              # Idle I/O class (if available)
+%
+Show full command line of running processes.
+
+   ps auxww                                 # Don't truncate command lines
+   ps -ef | grep analysis                   # Find specific processes
+%
+Kill all processes matching a pattern.
+
+   pkill -f "pattern"                       # Kill by command line match
+   killall -9 program_name                  # Force kill all instances
+%
+Get process tree to understand parent-child relationships.
+
+   pstree                                   # Show process tree
+   pstree -p                                # Include PIDs
+   pstree -u username                       # For specific user
+%
+Check if script is being sourced or executed.
+
+   [[ "${BASH_SOURCE[0]}" != "${0}" ]] && echo "sourced" || echo "executed"
+%
+Make script exit on any error (safer scripts).
+
+   set -e                                   # Exit on any error
+   set -u                                   # Exit on undefined variable
+   set -o pipefail                          # Exit if any pipe command fails
+   set -euo pipefail                        # All of the above
+%
+Debug bash scripts by showing each command.
+
+   set -x                                   # Print commands before executing
+   bash -x script.sh                        # Run script in debug mode
+%
+Limit resource usage for a command.
+
+   ulimit -v 1000000; command               # Limit virtual memory (KB)
+   ulimit -t 3600; command                  # Limit CPU time (seconds)
+%
+Find broken symbolic links.
+
+   find . -type l ! -exec test -e {} \; -print  # Find broken symlinks
+   find -L . -type l                        # Shorter version (GNU find)
+%
+Show real path of symbolic links.
+
+   readlink -f symlink                      # Follow link to real path
+   realpath file_or_link                    # Canonical absolute path
+%
+Quick way to backup a file before editing.
+
+   cp file.txt{,.backup}                    # Creates file.txt.backup
+   cp -p file.txt file.txt.$(date +%Y%m%d)  # Backup with date
+%
+Run command immune to hangups and logouts.
+
+   nohup long_running_job > output.log 2>&1 &
+   disown                                   # Remove from job control
+%
+Schedule one-time job execution.
+
+   at now + 1 hour                          # Run in 1 hour
+   at 2:30 AM                               # Run at specific time
+   echo "command" | at midnight             # Schedule from pipe
+   atq                                      # List scheduled jobs
+   atrm job_number                          # Remove scheduled job
+%
+Check what libraries a program needs.
+
+   ldd $(which python)                      # Check Python dependencies
+%
+Display disk I/O stats continuously.
+
+   iostat -x 5 10                           # Every 5 sec, 10 times
+   iotop -o                                 # Show only processes doing I/O
+%
+Benchmark disk performance with dd.
+
+   dd if=/dev/zero of=testfile bs=1M count=1024  # Write test
+   dd if=testfile of=/dev/null bs=1M        # Read test
+   # Remember to rm testfile when done
+%
+Check network port status.
+
+   nc -zv hostname 22                       # Test if SSH port is open
+   nc -zv hostname 1-1000                   # Scan ports 1-1000
+%
+Display routes and network configuration.
+
+   route -n                                 # Show routing table
+   ip route show                            # Modern way
+   ip link show                             # Show network interfaces
+%
+Find out which process is using a port.
+
+   lsof -i :8080                            # What's using port 8080?
+   netstat -tulpn | grep :22                # Check specific port
+%
+DNS lookups and troubleshooting.
+
+   nslookup lxplus.cern.ch                  # Basic DNS lookup
+   dig lxplus.cern.ch                       # More detailed
+   dig +short lxplus.cern.ch                # Just the IP
+   host lxplus.cern.ch                      # Simple lookup
+%
+Compare checksums between local and remote files.
+
+   md5sum local.root && ssh remote "md5sum /path/to/remote.root"
+%
+Copy directory structure without files.
+
+   find source/ -type d -exec mkdir -p dest/{} \;
+   rsync -av -f"+ */" -f"- *" source/ dest/  # Using rsync
+%
+Monitor progress of dd command.
+
+   kill -USR1 $(pgrep ^dd$)                 # Send signal to show progress
+   # Or use pv: pv /dev/sda | dd of=/dev/sdb
+%
+Extract specific pages from text files by pattern.
+
+   sed -n '/START/,/END/p' file.txt         # Extract between markers
+   awk '/START/,/END/' file.txt             # Alternative with awk
+%
+Print lines matching pattern with context.
+
+   grep -A 5 "ERROR" logfile                # 5 lines after match
+   grep -B 5 "ERROR" logfile                # 5 lines before match
+   grep -C 5 "ERROR" logfile                # 5 lines before and after
+%
+Colored grep output for easier reading.
+
+   grep --color=always "pattern" file.txt | less -R
+   export GREP_OPTIONS='--color=auto'      # Make colored default
+%
+Use less with color support for logs.
+
+   less -R colored_output.log               # Preserve color codes
+%
+Find duplicate files based on content.
+
+   fdupes -r directory/                     # If fdupes installed
+   find . -type f -exec md5sum {} + | sort | uniq -w32 -d  # Using find+md5sum
+%
+Securely delete file contents before removal.
+
+   shred -vfz -n 5 sensitive.txt            # Overwrite 5 times
+   dd if=/dev/urandom of=sensitive.txt bs=1M  # Alternative
+   rm sensitive.txt
+%
+Show what commands are actually aliased.
+
+   alias                                    # Show all aliases
+   type ls                                  # Check if ls is aliased
+   \ls                                      # Run unaliased version
+%
+Quick network speed test using wget.
+
+   wget --output-document=/dev/null http://speedtest.url
+   curl -o /dev/null http://speedtest.url  # Using curl
+%
+Sum numbers from a column.
+
+   awk '{sum += $1} END {print sum}' data.txt
+   cut -d',' -f3 data.csv | awk '{sum+=$1} END {print sum}'
+%
+Calculate mean of numbers in file.
+
+   awk '{sum+=$1; count++} END {print sum/count}' numbers.txt
+%
+Replace tabs with spaces preserving format.
+
+   expand -t 4 file.txt                     # 4 spaces per tab
+   pr -t -e4 file.txt                       # Alternative
+%
+Execute command in a specific directory without changing current dir.
+
+   (cd /other/dir && command)               # Subshell
+   pushd /other/dir; command; popd          # Using directory stack
+%
+Append to file with sudo privileges.
+
+   echo "text" | sudo tee -a /etc/file      # Append to protected file
+   echo "text" | sudo tee /etc/file         # Overwrite protected file
+%
+Find files owned by specific user or group.
+
+   find / -user username 2>/dev/null        # Files owned by user
+   find / -group groupname 2>/dev/null      # Files owned by group
+%
+Find files with specific permissions.
+
+   find . -perm 777                         # Exact permissions
+   find . -perm -u+w                        # At least user writable
+   find . -perm /u+x,g+x                    # User OR group executable
+%
+Copy while preserving all attributes.
+
+   cp -a source dest                        # Archive mode
+   rsync -aH source dest                    # With hard links
+%
+Show only directories in current location.
+
+   ls -d */                                 # Directories ending in /
+   find . -maxdepth 1 -type d               # Using find
+%
+Get file size in different units.
+
+   du -h file.root                          # Human readable
+   du -b file.root                          # Bytes
+   du -m file.root                          # Megabytes
+   stat -c%s file.root                      # Just size in bytes
+%
+Create a file of specific size.
+
+   fallocate -l 1G testfile.dat             # Fast (if supported)
+   truncate -s 1G testfile.dat              # Very fast
+   dd if=/dev/zero of=file bs=1M count=1024 # Traditional way
+%
+Monitor memory usage of a specific process.
+
+   ps -p PID -o %mem,rss,vsz                # Memory info for PID
+   pmap PID                                 # Memory map of process
+%
+Watch command that highlights changes.
+
+   watch -d 'ps aux | grep python'          # Highlight differences
+   watch -n 1 -d "free -h"                  # Update every second
+%
+Join all lines of a file into one line.
+
+   tr '\n' ' ' < file.txt                   # Replace newlines with space
+   paste -sd' ' file.txt                    # Using paste
+%
+Split a file into N roughly equal parts.
+
+   split -n 4 largefile.txt chunk_          # Split into 4 parts
+%
+Create a file with specific content length.
+
+   head -c 100M /dev/zero > testfile        # 100MB of zeros
+   dd if=/dev/zero of=testfile bs=1M count=100  # Same thing
+%
+Quick way to create a file full of random text.
+
+   base64 /dev/urandom | head -c 10000 > random.txt
+   cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 1000 > random.txt
+%
+Interactively select files with tab completion.
+
+   # In bash, use Tab for completion
+   ls /data/2024/<Tab><Tab>                 # Shows options
+%
+Run last command with sudo prepended.
+
+   sudo !!                                  # Run previous command with sudo
+%
+Reuse last argument from previous command.
+
+   mkdir /long/path/to/directory
+   cd !$                                    # cd to the path just created
+%
+Fix typo in previous command.
+
+   ^typo^correction^                        # Replace first occurrence
+   !!:s/typo/correction/                    # Alternative syntax
+%
+Extract filename and extension.
+
+   filename="/path/to/file.tar.gz"
+   basename "$filename"                     # file.tar.gz
+   basename "$filename" .tar.gz             # file
+   dirname "$filename"                      # /path/to
+%
+Safely test commands before executing.
+
+   echo rm file.txt                         # Test first
+   # Then run the actual command when sure
+%
+Make script portable with explicit paths.
+
+   #!/usr/bin/env bash                      # Find bash in PATH
+   #!/bin/bash                              # Absolute path (less portable)
+%
+Comment out blocks in shell scripts.
+
+   : <<'END_COMMENT'
+   This is all commented out
+   Multiple lines
+   END_COMMENT
+%
+Pause script execution and wait for user.
+
+   read -p "Press Enter to continue..."
+   read -n 1 -p "Press any key to continue..."
+%
+Print colored text in terminal.
+
+   echo -e "\033[31mRed text\033[0m"        # Red
+   echo -e "\033[32mGreen text\033[0m"      # Green
+   echo -e "\033[1;33mBold Yellow\033[0m"   # Bold yellow
+%
+Ring terminal bell to notify when job completes.
+
+   long_running_job; echo -e "\a"           # ASCII bell
+   long_running_job && notify-send "Done"   # Desktop notification (if available)
+%
+Store command output in a variable.
+
+   output=$(command)                        # Modern way
+   output=`command`                         # Old way (backticks)
+%
+Run multiple commands based on exit status.
+
+   command1 && command2 && command3         # All must succeed
+   command1 || command2 || command3         # First success stops chain
+%
+Check last command's success in a script.
+
+   if [ $? -eq 0 ]; then echo "Success"; else echo "Failed"; fi
+%
+Loop through files safely handling spaces in names.
+
+   while IFS= read -r -d '' file; do
+       process "$file"
+   done < <(find . -name "*.root" -print0)
+%
+Process command line arguments in scripts.
+
+   while getopts "a:b:c" opt; do
+       case $opt in
+           a) arg_a=$OPTARG;;
+           b) arg_b=$OPTARG;;
+           c) flag_c=true;;
+       esac
+   done
+%
+Check if running as root in a script.
+
+   if [ "$EUID" -ne 0 ]; then
+       echo "Please run as root"
+       exit 1
+   fi
+%
+Lock file to prevent concurrent execution.
+
+   (
+     flock -n 200 || exit 1
+     # Critical section here
+   ) 200>/var/lock/mylockfile
+%
+Generate random passwords or tokens.
+
+   openssl rand -base64 32                  # Random base64 string
+   openssl rand -hex 16                     # Random hex string
+   tr -dc 'A-Za-z0-9!@#$%^&*' < /dev/urandom | head -c 20  # Random password
+%
+Convert epoch time to human readable.
+
+   date -d @1234567890                      # From epoch timestamp
+   date +%s                                 # Current time as epoch
+%
+Measure bandwidth of a pipe.
+
+   command | pv | other_command             # If pv available
+   command | pv -pterb > file               # With detailed stats
+%
+Create RAM disk for fast temporary storage (need sudo).
+
+   mkdir /mnt/ramdisk
+   mount -t tmpfs -o size=512M tmpfs /mnt/ramdisk
+   # Remember to umount when done
+%
+Find the largest directories in a path.
+
+   du -ah /path | sort -rh | head -20       # Top 20 largest
+   du -h --max-depth=2 | sort -hr | head    # Depth limited
+%
+Find files not accessed in a long time (candidates for archival).
+
+   find /data -type f -atime +365           # Not accessed in a year
+   find . -type f -mtime +90 -size +1G      # Large old files
+%
+Verify no data corruption during copy.
+
+   rsync -av --checksum source/ dest/       # Verify with checksums
+   cp file.root backup/ && cmp file.root backup/file.root
+%
+Archive with verification.
+
+   tar -czf backup.tar.gz data/ && tar -tzf backup.tar.gz > /dev/null && echo "OK"
+%
+Find world-writable files (security check).
+
+   find / -type f -perm -o+w 2>/dev/null    # World-writable files
+   find / -type d -perm -o+w 2>/dev/null    # World-writable directories
+%
+Find setuid and setgid files (security check).
+
+   find / -perm -4000 2>/dev/null           # Setuid files
+   find / -perm -2000 2>/dev/null           # Setgid files
+%
+Quickly check system for available updates (varies by system).
+
+   # On RHEL/CentOS: yum check-update
+   # On Ubuntu/Debian: apt list --upgradable
+   # On Fedora: dnf check-update
+%
+Get your external IP address.
+
+   curl ifconfig.me                         # Simple
+   wget -qO- ifconfig.me                    # Using wget
+   dig +short myip.opendns.com @resolver1.opendns.com
+%
+Test network speed between two hosts.
+
+   # On receiving host: nc -l 12345 > /dev/null
+   # On sending host: dd if=/dev/zero bs=1M count=1024 | nc hostname 12345
+%
+Enable command history timestamp.
+
+   export HISTTIMEFORMAT="%F %T "           # Add to ~/.bashrc
+   history                                  # Now shows timestamps
+%
+Increase bash history size.
+
+   export HISTSIZE=10000                    # In-memory history
+   export HISTFILESIZE=10000                # History file size
+   # Add to ~/.bashrc
+%
+Prevent command from being saved in history.
+
+   export HISTCONTROL=ignorespace           # Ignore commands starting with space
+    secret_command                          # Leading space, not saved
+%
+Share history across all bash sessions immediately.
+
+   export PROMPT_COMMAND="history -a; history -n"  # Add to ~/.bashrc
+%
+Search and edit file in one command.
+
+   grep -l "pattern" *.txt | xargs nano     # Edit all matching files
+%
+Benchmark alternative commands to find fastest.
+
+   time command1
+   time command2
+   # Compare real time to see which is faster
+%
+Use parameter substitution for path manipulation.
+
+   path="/data/2024/file.root"
+   ${path%/*}                               # /data/2024 (directory)
+   ${path##*/}                              # file.root (filename)
+   ${path%.root}.txt                        # /data/2024/file.txt (change ext)
+%
+Prevent accidental file overwrites.
+
+   set -o noclobber                         # Prevent > from overwriting
+   command >| file                          # Force overwrite when needed
+   set +o noclobber                         # Disable protection
+%
+Make your shell scripts more robust and maintainable.
+
+   #!/usr/bin/env bash
+   set -euo pipefail                        # Strict error handling
+   IFS=$'\n\t'                              # Safer word splitting
+%
+Print array elements on separate lines.
+
+   printf '%s\n' "${array[@]}"              # One per line
+%
+Search code efficiently with ack or ag (The Silver Searcher).
+
+   ack "pattern" --python                   # Search only Python files
+   ag "import numpy" --python               # Fast search in Python files
+   ack -w "TOKEN"                           # Match whole words only
+%
+Show which groups a user belongs to.
+
+   groups                                   # Show your groups
+   groups username                          # Show groups for specific user
+   id                                       # Show user and group IDs
+   id -Gn                                   # Show all group names
+%
+Get detailed user and group information.
+
+   id                                       # Show UID, GID, and groups
+   id username                              # Show info for specific user
+   id -u                                    # Show only user ID
+   id -g                                    # Show only primary group ID
+%
+Temporarily switch to another group.
+
+   newgrp groupname                         # Switch to group (new shell)
+   # Files created will belong to the new group
+%
+Work with xz compression for better compression ratios.
+
+   xz large_file.txt                        # Compress (creates .xz)
+   xz -d file.txt.xz                        # Decompress
+   xzcat file.txt.xz                        # View without decompressing
+   tar -cJf archive.tar.xz directory/       # Create xz-compressed tar
+%
+Use flock to prevent concurrent script execution.
+
+   flock -n /tmp/script.lock -c "./script.sh"  # Fail if already locked
+   flock -w 10 /tmp/lock -c "command"       # Wait up to 10 seconds for lock
+%
+Manage systemd services and view logs.
+
+   systemctl status servicename             # Check service status
+   systemctl restart servicename            # Restart service
+   systemctl enable servicename             # Enable on boot
+   journalctl -u servicename                # View service logs
+   journalctl -f                            # Follow system logs
+%
+Use journalctl for powerful log querying.
+
+   journalctl -xe                           # Recent logs with explanations
+   journalctl --since "1 hour ago"          # Logs from last hour
+   journalctl -p err                        # Only error messages
+   journalctl -b                            # Logs from current boot
+%
+View virtual memory and system statistics.
+
+   vmstat                                   # Show VM stats
+   vmstat 5                                 # Update every 5 seconds
+   vmstat -s                                # Display memory statistics
+%
+Change user password expiry information.
+
+   chage -l username                        # List password aging info
+   chage -M 90 username                     # Set max password age to 90 days
+   chage -E 2025-12-31 username             # Set account expiry date
+%
+Securely transfer files with SFTP.
+
+   sftp user@hostname                       # Connect to remote host
+   sftp> get remote_file.txt                # Download file
+   sftp> put local_file.txt                 # Upload file
+   sftp> ls                                 # List remote files
+%
+Use advanced less options for better file viewing.
+
+   less -S file.txt                         # Don't wrap long lines
+   less -N file.txt                         # Show line numbers
+   less -SN file.txt                        # Both: no wrap + line numbers
+   less +F logfile                          # Follow mode like tail -f
+%
+List all available commands on your system.
+
+   compgen -c                               # List all commands
+   compgen -c | grep pattern                # Search for specific commands
+   compgen -a                               # List all aliases
+%
+Open files with their default application from command line.
+
+   xdg-open file.pdf                        # Open with default PDF viewer
+   xdg-open https://example.com             # Open URL in default browser
+   xdg-open .                               # Open current directory in file manager
+%
+Encrypt and decrypt files securely with GPG.
+
+   gpg --symmetric sensitive_data.txt       # Encrypt (creates .gpg file)
+   gpg --decrypt sensitive_data.txt.gpg     # Decrypt file
+   rm sensitive_data.txt                    # Remove unencrypted file
+%
+Set up SSH keys for passwordless authentication.
+
+   ssh-keygen                               # Generate SSH key pair
+   ssh-copy-id user@lxplus.cern.ch          # Copy public key to remote host
+   # Now you can SSH without password
+%
+Mount remote directories as if they were local with sshfs.
+
+   sshfs user@lxplus:/work/data ~/mnt/data  # Mount remote directory
+   umount ~/mnt/data                        # Unmount when done
+%
+Check your disk quota on shared systems.
+
+   quota -s                                 # Show your disk usage and limits
+   df -h /home                              # Check filesystem space
+%
+List disk partitions and block devices.
+
+   lsblk                                    # List block devices in tree format
+   lsblk -f                                 # Show filesystems and UUIDs
+   blkid                                    # Show block device attributes
+%
+Find processes by name without using ps and grep.
+
+   pgrep python                             # Show PIDs of Python processes
+   pgrep -a analysis                        # Show PIDs and full command line
+   pgrep -u $USER                           # Show your processes only
+%
+Get comprehensive system information.
+
+   neofetch                                 # Pretty system info display
+   inxi -b                                  # Brief system info
+   lscpu                                    # Detailed CPU information
+   lsb_release -a                           # Linux distribution info
+%
+Monitor CPU performance per core.
+
+   mpstat                                   # Overall CPU statistics
+   mpstat 5                                 # Update every 5 seconds
+   mpstat -P ALL 5                          # Show all CPUs separately
+%
+Check network interface speed and performance.
+
+   ethtool eth0                             # Show ethernet interface info
+   ip link show                             # Show all network interfaces
+   iperf -c hostname                        # Test network bandwidth (needs iperf server)
+%
+Monitor system power consumption.
+
+   powertop                                 # Interactive power monitoring (need sudo)
+   powerstat 10 5                           # Power stats every 10 sec, 5 times
+%
+Find files quickly with fd (modern alternative to find).
+
+   fd pattern                               # Search files/dirs matching pattern
+   fd -t f pattern                          # Search files only (not directories)
+   fd -e root                               # Search by extension
+   fd --changed-within 1week                # Files modified in last week
+%
+Locate files instantly using indexed database.
+
+   plocate filename                         # Fast file search
+   sudo updatedb                            # Update file database
+   plocate -i pattern                       # Case-insensitive search
+%
+Check network socket statistics (modern netstat replacement).
+
+   ss -tuln                                 # Show listening TCP/UDP ports
+   ss -tup                                  # Show established connections
+   ss -s                                    # Show socket statistics summary
+%
+Perform quick calculations in the terminal with bc.
+
+   bc                                       # Start interactive calculator
+   echo "scale=2; 22/7" | bc                # Calculate with 2 decimal places
+   echo "sqrt(2)" | bc -l                   # Math functions with -l flag
+%
+Format text into aligned columns for better readability.
+
+   column -t file.csv                       # Auto-format into columns
+   column -t -s',' data.csv                 # Use comma as delimiter
+   ls -l | column -t                        # Align ls output
+%
+Schedule recurring tasks with crontab.
+
+   crontab -e                               # Edit cron jobs
+   crontab -l                               # List current cron jobs
+   # Format: minute hour day month weekday command
+   # Example: 0 2 * * * /path/to/backup.sh  # Run daily at 2 AM
+%
+Evaluate mathematical and string expressions.
+
+   expr 10 + 20                             # Arithmetic (prints 30)
+   expr length "hello world"                # String length (prints 11)
+   expr substr "analysis" 1 4               # Substring (prints "anal")
+%
+Change file attributes for special protections.
+
+   chattr +i important.dat                  # Make file immutable (can't delete/modify)
+   chattr -i important.dat                  # Remove immutable flag
+   lsattr file.dat                          # List file attributes
+%
+Navigate directory stack with pushd and popd.
+
+   pushd /data/2024                         # Push directory onto stack and cd
+   pushd /work/analysis                     # Push another directory
+   dirs                                     # Show directory stack
+   popd                                     # Return to previous directory
+%
+Write messages to system log for debugging.
+
+   logger "Starting analysis job"           # Write to syslog
+   logger -p user.err "Job failed"          # Specify priority
+   journalctl -f                            # Follow system log to see messages
+%
+Monitor pipe progress with pv (if available).
+
+   pv large_file.root | gzip > compressed.gz  # Show progress bar
+   cat data.root | pv | analysis_tool        # Monitor throughput
+%
+Find process ID by name quickly.
+
+   pidof python                             # Get PIDs of all Python processes
+   pidof -s process_name                    # Get single PID only
+%
+Network diagnostic combining ping and traceroute.
+
+   mtr hostname                             # Interactive network diagnostic
+   mtr -c 10 -r lxplus.cern.ch              # Report mode, 10 cycles
+%
+Send desktop notifications from scripts (if available).
+
+   notify-send "Job Complete" "Analysis finished successfully"
+   notify-send -u critical "Error" "Check logs"
+%
+Display all environment variables.
+
+   printenv                                 # Show all environment variables
+   printenv PATH                            # Show specific variable
+   printenv | grep -i atlas                 # Search for ATLAS-related vars
+%
+View process memory usage details.
+
+   pmap PID                                 # Show memory map of process
+   pmap -x PID                              # Extended format with details
+%
+Monitor system activity and performance with sar.
+
+   sar                                      # CPU usage report
+   sar -r 5 10                              # Memory usage every 5 sec, 10 times
+   sar -n DEV                               # Network statistics
+   sar -d                                   # Disk I/O statistics
+%
+Record and replay terminal sessions for documentation.
+
+   script session.log                       # Start recording session
+   # Do your work...
+   exit                                     # Stop recording
+   scriptreplay session.log                 # Replay the session
+%
+Extract readable text from binary files.
+
+   strings binary_file                      # Show printable strings
+   strings -n 10 data.root                  # Strings of 10+ chars
+   strings program | grep password          # Search for specific text
+%
+Set CPU affinity for better performance.
+
+   taskset -c 0-3 ./analysis.sh             # Run on CPUs 0-3
+   taskset -p PID                           # Show CPU affinity of process
+   taskset -cp 0,2,4 PID                    # Set process to specific CPUs
+%
+Manipulate terminal capabilities with tput.
+
+   tput cols                                # Get terminal width
+   tput lines                               # Get terminal height
+   tput setaf 1                             # Set foreground color to red
+   tput bold                                # Enable bold text
+   tput sgr0                                # Reset all attributes
+%
+Handle signals in bash scripts with trap.
+
+   trap "echo Interrupted" INT              # Handle Ctrl+C
+   trap "cleanup_function" EXIT             # Run on script exit
+   trap - INT                               # Remove trap
+%
+Set default file creation permissions with umask.
+
+   umask                                    # Show current mask
+   umask 022                                # Files: 644, Dirs: 755
+   umask 077                                # Files: 600, Dirs: 700 (private)
+%
+Generate universally unique identifiers.
+
+   uuidgen                                  # Generate random UUID
+   uuidgen -t                               # Generate time-based UUID
+%
+Scan network ports with nmap (if available).
+
+   nmap hostname                            # Scan common ports
+   nmap -p 22,80,443 hostname               # Scan specific ports
+   nmap 192.168.1.0/24                      # Scan entire subnet
+%
+Reset terminal when it gets messed up.
+
+   reset                                    # Reinitialize terminal
+   stty sane                                # Restore terminal to sane state
+%
+Bash scripting: Check if command succeeded.
+
+   if command; then
+       echo "Success"
+   fi
+
+   command && echo "Success" || echo "Failed"  # One-liner
+%
+Bash scripting: Loop through files safely.
+
+   for file in *.root; do
+       [ -f "$file" ] || continue           # Skip if no matches
+       process "$file"
+   done
+%
+Bash scripting: Read lines from file.
+
+   while IFS= read -r line; do
+       echo "$line"
+   done < file.txt
+%
+Bash scripting: Check if variable is set.
+
+   if [ -z "$VAR" ]; then
+       echo "VAR is unset or empty"
+   fi
+
+   ${VAR:-default_value}                    # Use default if unset
+%
+Bash scripting: Exit on any error (strict mode).
+
+   set -euo pipefail                        # Exit on error, undefined vars, pipe failures
+   # Add this at the top of scripts for safer execution
+%
+Keyboard shortcuts for editing command line.
+
+   Ctrl+A / Ctrl+E                          # Jump to start/end of line
+   Ctrl+U / Ctrl+K                          # Delete from cursor to start/end of line
+   Ctrl+W                                   # Delete word before cursor
+   Alt+D                                    # Delete word after cursor
+   Ctrl+L                                   # Clear screen
+%
+Automatically answer prompts in interactive commands.
+
+   yes | command                            # Answer 'y' to all prompts
+   yes "answer" | command                   # Provide specific answer
+%
+Clear file contents without deleting the file.
+
+   > filename.txt                           # Truncate file to zero bytes
+   : > filename.txt                         # Alternative method
+%
+Find commands by description using apropos.
+
+   apropos "list directory"                 # Find commands related to listing directories
+   apropos network                          # Find all network-related commands
+%
+Remember: man pages and --help are your friends for detailed information!
+
+   man command                              # Full documentation
+   command --help                           # Quick usage summary
+   info command                             # GNU info documentation (if available)
+%
+Keep learning - the terminal is powerful and these are just the basics.
+Combine these commands creatively to build efficient workflows for your
+ATLAS analysis. Happy computing!
