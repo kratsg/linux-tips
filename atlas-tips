@@ -1430,12 +1430,6 @@ Find setuid and setgid files (security check).
    find / -perm -4000 2>/dev/null           # Setuid files
    find / -perm -2000 2>/dev/null           # Setgid files
 %
-Quickly check system for available updates (varies by system).
-
-   # On RHEL/CentOS: yum check-update
-   # On Ubuntu/Debian: apt list --upgradable
-   # On Fedora: dnf check-update
-%
 Get your external IP address.
 
    curl ifconfig.me                         # Simple
