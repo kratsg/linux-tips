@@ -4,6 +4,7 @@ version = "1.0.0"
 description = "ATLAS Linux Tips Fortune File"
 channels = ["conda-forge"]
 platforms = ["osx-64", "osx-arm64", "linux-64"]
+exclude-newer = "7d"
 
 [dependencies]
 python = ">=3.14.0,<3.15"
